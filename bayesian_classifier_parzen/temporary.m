@@ -1,0 +1,1 @@
+data = load('../data/image_data/features/street/street_a205062.jpg_color_edh_entropy');

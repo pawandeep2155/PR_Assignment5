@@ -6,16 +6,18 @@ function density_at_x = parzen_density_estimate(training_data,test_point,hyper_p
    num_of_images = size(data,2)/size(x,2);
    density_row = zeros(size(x,1),1);
    
-   for i=1:num_of_images
+   for row = 1:size(x,1) % compute density for each row vector of test point.
        
-        train_image_i = data(:,(i-1) * size(x,2) + 1:(i-1) * size(x,2) + size(x,2));
-        
-        for row = 1:size(x,1) % compute density for each row vector of test point.
-            density_row(row) = compute_density(train_image_i(row,:)', x(row,:)',h);
-        end  
-        
+       for i=1:num_of_images % find density of each test image row against each train images row. 
+           
+           train_image_i = data(:,(i-1) * size(x,2) + 1:(i-1) * size(x,2) + size(x,2));
+           density_row(row) = density_row(row) + compute_density(train_image_i(row,:)', x(row,:)',h);
+           
+       end
+       
    end
    
+   density_row = density_row/num_of_images; 
    density_at_x = mean(density_row);
    
 end
