@@ -1,1 +1,3 @@
-data = load('../data/image_data/features/street/street_a205062.jpg_color_edh_entropy');
+actual = [1 1 1 1 0 0 0 0];
+predicted = [1 1 1 0 0 0 0 0];
+plotconfusion(actual,predicted);
