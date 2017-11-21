@@ -1,3 +1,2 @@
-actual = [1 1 1 1 0 0 0 0];
-predicted = [1 1 1 0 0 0 0 0];
-plotconfusion(actual,predicted);
+my_ = ['a' 'b' 'c']';
+my_ = my_(randperm(length(my_)));
