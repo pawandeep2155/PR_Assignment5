@@ -4,7 +4,7 @@ coast_data_info = dir('../data/image_data/features/coast/*.jpg_color_edh_entropy
 forest_data_info = dir('../data/image_data/features/forest/*.jpg_color_edh_entropy');
 
 %% Set learning Rate for Gradient Descent.
-learn_rate = 0.01;
+learn_rate = 0.00001;
 
 %% Get data for each of the class. 
 num_of_images_street = length(street_data_info);
@@ -60,33 +60,20 @@ training_points_class123 = train_street_count + train_coast_count + train_forest
 fprintf('Training on 1-2,3 \n');
 w1 = randi(10,24,1);
 
-for i=1:1000
+for i=1:100
   
     for j=1:training_points_class123
         
         training_image = training_data(:,(j-1) * 23 + 1:(j-1) * 23 + 23);
-        count_class1 = 0;
-        count_class2 = 0;
-        
+
         % For each row of training each compute w'x.
         for k=1:size(data_street,1)
-            if(w1' * [training_image(k,:)' ; 1] >= 0)
-                count_class1 = count_class1 + 1;
-            else
-                count_class2 = count_class2 + 1;
+            if(j <= train_street_count && w1' * [training_image(k,:)' ; 1] <= 0)
+                w1 = w1 + learn_rate * [training_image(k,:)' ; 1];
+            end
+            if(j > train_street_count &&  w1' * [training_image(k,:)' ; 1] >= 0)
+                w1 = w1 - learn_rate * [training_image(k,:)' ; 1];
             end    
-        end
-        
-        image_representor =  mean(training_image,1)';
-        
-        % Street image is misclassified hence update w vector.
-        if(j <= train_street_count && count_class1 < count_class2) 
-           w1 = w1 + learn_rate *  [image_representor;1];
-        end
-        
-        % Coast image is misclassified hence update w vector.
-        if(j > train_street_count && count_class1 > count_class2) 
-           w1 = w1 - learn_rate *  [image_representor;1];
         end
 
     end
@@ -98,35 +85,21 @@ training_points_class231 = train_coast_count + train_forest_count + train_street
 fprintf('Training on 2-1,3 \n');
 w2 = randi(10,24,1);
 
-for i=1:1000
+for i=1:100
   
     for j=1:training_points_class231
         
         training_image = training_data(:,(j-1) * 23 + 1:(j-1) * 23 + 23);
-        count_class2 = 0;
-        count_class3 = 0;
         
         % For each row of training each compute w'x.
         for k=1:size(data_coast,1)
-            if(w1' * [training_image(k,:)' ; 1] >= 0)
-                count_class2 = count_class2 + 1;
-            else
-                count_class3 = count_class3 + 1;
+            if(j <= train_coast_count && w2' * [training_image(k,:)' ; 1] <= 0)
+                w2 = w2 + learn_rate * [training_image(k,:)' ; 1];
+            end
+            if(j > train_coast_count && w2' * [training_image(k,:)' ; 1] >= 0)
+                w2 = w2 - learn_rate * [training_image(k,:)' ; 1];
             end    
         end
-        
-        image_representor =  mean(training_image,1)';
-        
-        % Coast image is misclassified hence update w vector.
-        if(j <= train_coast_count && count_class2 < count_class3) 
-           w2 = w2 + learn_rate *  [image_representor;1];
-        end
-        
-        % Forest image is misclassified hence update w vector.
-        if(j > train_coast_count && count_class2 > count_class3) 
-           w2 = w2 - learn_rate *  [image_representor;1];
-        end
-
     end
 end
 
@@ -136,35 +109,21 @@ training_points_class312 = train_forest_count + train_street_count + train_coast
 fprintf('Training on 3-1,2 \n');
 w31 = randi(10,24,1);
 
-for i=1:1000
+for i=1:100
   
     for j=1:training_points_class312
         
         training_image = training_data(:,(j-1) * 23 + 1:(j-1) * 23 + 23);
-        count_class3 = 0;
-        count_class1 = 0;
         
         % For each row of training each compute w'x.
         for k=1:size(data_forest,1)
-            if(w31' * [training_image(k,:)' ; 1] >= 0)
-                count_class3 = count_class3 + 1;
-            else
-                count_class1 = count_class1 + 1;
+            if(j <= train_forest_count && w31' * [training_image(k,:)' ; 1] <= 0)
+                w31 = w31 + learn_rate * [training_image(k,:)' ; 1];
+            end
+            if(j > train_forest_count && w31' * [training_image(k,:)' ; 1] >= 0)
+                w31 = w31 - learn_rate * [training_image(k,:)' ; 1];
             end    
         end
-        
-        image_representor =  mean(training_image,1)';
-        
-        % Forest image is misclassified hence update w vector.
-        if(j <= train_forest_count && count_class3 < count_class1) 
-           w31 = w31 + learn_rate *  [image_representor;1];
-        end
-        
-        % Street image is misclassified hence update w vector.
-        if(j > train_street_count && count_class3 > count_class1) 
-           w31 = w31 - learn_rate *  [image_representor;1];
-        end
-
     end
 end
 
